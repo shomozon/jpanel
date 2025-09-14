@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8">
+ <title>a</title>
+</head>
+<body>
+<div style="display: flex;">
+<article style="width: 75%">
+<h2 style="border-bottom: 2px solid; padding-bottom: 5px">JPanelについて</h2>
+<p></p>
+<p></p>
+<ul style="border: 2px solid #aaa ; margin-right: 300px; padding-top: 10px; padding-bottom: 10px;">
+  <li><a href="#paint">簡易ペイントソフト</a></li>
+</ul>
+<h3 id="paint">簡易ペイントソフト</h3>
+<br>
+<p>以下がソースコード <a href="Panel.java" download>(Panel.java)</a></p>
+<pre style="background-color: #244 ; color: #fff ; padding-left: 10px"><code>
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+
+
+public class Panel {
+
+  public static void main(String[] args) {
+
+  JFrame jf = new JFrame();
+  jf.setSize(500, 300);
+  jf.setLayout(null);
+  jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+  JPanel panel = new JPanel();
+  panel.setBounds(0, 0, 500, 250);
+  panel.setLayout(null);
+
+  JButton button = new JButton("リセット");
+  button.setBounds(260, 30, 70, 20);
+
+  Canvas canvas = new Canvas();
+  canvas.setBounds(20, 20, 224, 224);
+
+  //Atomicboolean b = new Atomicboolean();
+
+  canvas.addMouseMotionListener(new MouseMotionAdapter() {
+    public void mouseDragged(MouseEvent e) {
+
+      canvas.g2.fillOval(e.getX() - 5, e.getY() - 5, 10, 10);
+      canvas.repaint();
+
+    }
+  });
+
+  button.addActionListener(new AbstractAction(){
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      canvas.g2.setColor(Color.WHITE);
+      canvas.g2.fillRect(0, 0, 224, 224);
+      canvas.g2.setColor(Color.BLACK);
+      canvas.repaint();
+    }
+  });
+
+  panel.add(canvas);
+  panel.add(button);
+  jf.add(panel);
+  jf.setVisible(true);
+
+  }
+}
+
+class Canvas extends JPanel {
+
+  BufferedImage can;
+  Graphics2D g2;
+
+  Canvas() {
+    can = new BufferedImage(224, 224, BufferedImage.TYPE_INT_ARGB);
+    g2 = can.createGraphics();
+    g2.setColor(Color.WHITE);
+    g2.fillRect(0, 0, 224, 224);
+    g2.setColor(Color.BLACK);
+  }
+
+  @Override
+  public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    g.drawImage(can, 0, 0, null);
+    g.drawLine(0, 0, 224, 0);
+    g.drawLine(0, 0, 0, 224);
+    g.drawLine(224, 224, 224, 0);
+    g.drawLine(224, 224, 0, 224);
+  }
+}
+
+
+</code></pre>
+<br>
+<p>実行結果は以下の通り</p>
+<img src="paint.png" width="350">
+</article>
+<aside style="margin-top: 100px; width: 25%;">
+  <ul>
+    <li>javaについて</li>
+  </ul>
+</aside>
+</div>
+</body>
+</html>
